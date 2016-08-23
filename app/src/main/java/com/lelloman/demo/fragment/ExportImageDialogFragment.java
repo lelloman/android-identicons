@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
@@ -81,7 +82,12 @@ public class ExportImageDialogFragment extends DialogFragment{
 		return new AlertDialog.Builder(context)
 				.setTitle(R.string.select_size)
 				.setView(view)
-				.setPositiveButton(android.R.string.ok, (dialogInterface, i) -> onSizeSelected(SIZES[view.getValue()]))
+				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialogInterface, int i) {
+						onSizeSelected(SIZES[view.getValue()]);
+					}
+				})
 				.setNegativeButton(android.R.string.cancel,null)
 				.create();
 	}

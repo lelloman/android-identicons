@@ -46,7 +46,7 @@ public class DetailActivity extends AppCompatActivity implements ExportImageDial
 		mType = intent.getIntExtra(EXTRA_IDENTICON_TYPE,TYPE_CLASSIC);
 		mHash = intent.getIntExtra(EXTRA_HASH,new Random().nextInt());
 
-		ImageView imageView = (ImageView) findViewById(R.id.image_view);
+		final ImageView imageView = (ImageView) findViewById(R.id.image_view);
 		imageView.setTransitionName(transitionName);
 
 		getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
