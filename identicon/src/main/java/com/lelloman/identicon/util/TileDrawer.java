@@ -5,7 +5,7 @@ import android.graphics.Paint;
 
 /**
  * 	the base implementation of a tile, the actual drawing of the shape
- * 	is performed in {@link TileDrawer#draw(Canvas, TileMeasures, int, Paint, Paint)} onDraw},
+ * 	is performed in {@link TileDrawer#onDraw(Path2, TileMeasures)},
  * 	this one just sets up the rotation and clear the background
  */
 public abstract class TileDrawer {

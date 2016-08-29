@@ -22,7 +22,7 @@ public class ClassicIdenticonTile {
 		FOUR_SQUARES(new TileDrawer() {
 			@Override // 1
 			public void onDraw(Path2 path, TileMeasures meas) {
-				path.addRectangle( 0,0,meas.w3,meas.h3);
+				path.addRectangle(0,0,meas.w3,meas.h3);
 				path.addRectangle(meas.w32, 0, meas.width, meas.h3);
 				path.addRectangle(0, meas.h32, meas.w3, meas.height);
 				path.addRectangle(meas.w32, meas.h32, meas.width, meas.height);
@@ -50,7 +50,7 @@ public class ClassicIdenticonTile {
 		ROTATED_SQUARE(new TileDrawer() {
 			@Override // 5
 			public void onDraw(Path2 path, TileMeasures meas) {
-				path.addPolygon( meas.wMid,0,meas.width,meas.hMid,meas.wMid,meas.height,0,meas.hMid);
+				path.addPolygon(meas.wMid,0,meas.width,meas.hMid,meas.wMid,meas.height,0,meas.hMid);
 			}
 		}),
 		SPEAR_TIP(new TileDrawer() {
@@ -62,9 +62,9 @@ public class ClassicIdenticonTile {
 		THREE_TRIANGLES(new TileDrawer() {
 			@Override // 7
 			public void onDraw(Path2 path, TileMeasures meas) {
-				path.addTriangle( meas.wMid,0,meas.w43,meas.hMid,meas.w4,meas.hMid);
+				path.addTriangle(meas.wMid,0,meas.w43,meas.hMid,meas.w4,meas.hMid);
 				path.addTriangle(0,meas.height,meas.w4,meas.hMid,meas.wMid,meas.height);
-				path.addTriangle( meas.width,meas.height,meas.w43,meas.hMid,meas.wMid,meas.height);
+				path.addTriangle(meas.width,meas.height,meas.w43,meas.hMid,meas.wMid,meas.height);
 			}
 		}),
 		SLIM_TRIANGLE(new TileDrawer() {

@@ -4,7 +4,12 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-
+/**
+ * an ImageView that displays an IdenticonDrawable, the type of
+ * the IdenticonDrawable is unknown and the method to create it
+ * is abstract, the alternative would be to pass the drawable directly
+ * to the view but setting just the hash looks nicer
+ */
 public abstract class IdenticonView extends ImageView {
 
 
@@ -32,8 +37,10 @@ public abstract class IdenticonView extends ImageView {
 
 	public void setHash(int hash) {
 		mHash = hash;
-		if(mIdenticonDrawable != null)
+		if(mIdenticonDrawable != null) {
 			mIdenticonDrawable.setHash(mHash);
+			invalidate();
+		}
 	}
 
 	protected abstract IdenticonDrawable makeIdenticonDrawable(int width, int height, int hash);
