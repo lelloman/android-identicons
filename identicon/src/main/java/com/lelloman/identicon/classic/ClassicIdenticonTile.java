@@ -3,7 +3,6 @@ package com.lelloman.identicon.classic;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.util.Log;
 
 import com.lelloman.identicon.util.Path2;
 import com.lelloman.identicon.util.TileDrawer;
@@ -257,7 +256,6 @@ public class ClassicIdenticonTile {
 
 		Tiles(TileDrawer drawer){
 			this.drawer = drawer;
-			Log.d("asd","asd");
 		}
 
 		public void draw(Canvas canvas, TileMeasures measures, int rotation, Paint bgPaint, Paint fgPaint){
