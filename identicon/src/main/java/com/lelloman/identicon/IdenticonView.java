@@ -10,7 +10,7 @@ import android.widget.ImageView;
  * is abstract, the alternative would be to pass the drawable directly
  * to the view but setting just the hash looks nicer
  */
-public abstract class IdenticonView extends ImageView {
+public abstract class IdenticonView extends android.support.v7.widget.AppCompatImageView {
 
 
 	private int mHash;
