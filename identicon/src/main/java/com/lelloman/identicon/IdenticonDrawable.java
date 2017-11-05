@@ -84,4 +84,8 @@ public abstract class IdenticonDrawable extends Drawable {
 	public int getOpacity() {
 		return mBitmapPaint.getAlpha();
 	}
+
+	public Bitmap getBitmap(){
+		return mBitmap;
+	}
 }

@@ -1,6 +1,7 @@
 package com.lelloman.identicon;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
@@ -10,7 +11,7 @@ import android.widget.ImageView;
  * is abstract, the alternative would be to pass the drawable directly
  * to the view but setting just the hash looks nicer
  */
-public abstract class IdenticonView extends android.support.v7.widget.AppCompatImageView {
+public abstract class IdenticonView extends ImageView {
 
 
 	private int mHash;
@@ -31,7 +32,13 @@ public abstract class IdenticonView extends android.support.v7.widget.AppCompatI
 
 		if (w > 0 && h > 0) {
 			mIdenticonDrawable = makeIdenticonDrawable(getWidth(), getHeight(), mHash);
-			setImageDrawable(mIdenticonDrawable);
+			// TODO on Oreo the drawable are very stretched, for some reason ?_?
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+				mIdenticonDrawable.invalidateBitmap();
+				setImageBitmap(mIdenticonDrawable.getBitmap());
+			}else {
+				setImageDrawable(mIdenticonDrawable);
+			}
 		}
 	}
 
