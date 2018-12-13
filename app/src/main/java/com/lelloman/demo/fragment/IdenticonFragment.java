@@ -12,8 +12,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.lelloman.identicon.IdenticonDrawable;
-import com.lelloman.identicon.IdenticonView;
+import com.lelloman.identicon.drawable.IdenticonDrawable;
+import com.lelloman.identicon.view.IdenticonView;
 
 import java.util.Random;
 

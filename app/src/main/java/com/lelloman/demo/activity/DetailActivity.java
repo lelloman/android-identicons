@@ -15,8 +15,8 @@ import android.widget.ImageView;
 
 import com.lelloman.demo.R;
 import com.lelloman.demo.fragment.ExportImageDialogFragment;
-import com.lelloman.identicon.classic.ClassicIdenticonDrawable;
-import com.lelloman.identicon.github.GithubIdenticonDrawable;
+import com.lelloman.identicon.drawable.ClassicIdenticonDrawable;
+import com.lelloman.identicon.drawable.GithubIdenticonDrawable;
 
 import java.util.Random;
 

@@ -21,8 +21,8 @@ android {
 dependencies {
     implementation 'com.android.support:appcompat-v7:28.0.0'
     implementation 'com.android.support:recyclerview-v7:28.0.0'
-//    implementation project(path: ':identicon')
-    implementation 'com.github.lelloman:android-identicons:v10'
+    implementation project(path: ':identicon')
+//    implementation 'com.github.lelloman:android-identicons:v10'
 
     testImplementation 'junit:junit:4.12'
 }

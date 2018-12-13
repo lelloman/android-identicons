@@ -1,8 +1,8 @@
 package com.lelloman.demo.fragment.classicidenticon;
 
 import com.lelloman.demo.fragment.IdenticonFragment;
-import com.lelloman.identicon.IdenticonDrawable;
-import com.lelloman.identicon.classic.ClassicIdenticonDrawable;
+import com.lelloman.identicon.drawable.IdenticonDrawable;
+import com.lelloman.identicon.drawable.ClassicIdenticonDrawable;
 
 
 public abstract class ClassicIdenticonFragment extends IdenticonFragment {

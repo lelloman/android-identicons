@@ -15,7 +15,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.lelloman.identicon.classic.ClassicIdenticonTile;
+import com.lelloman.identicon.drawable.ClassicIdenticonTile;
 import com.lelloman.identicon.util.TileMeasures;
 
 @SuppressWarnings("ResourceType")
@@ -74,7 +74,7 @@ public class ClassicTilesFragment extends Fragment {
 		@Override
 		public void onBindViewHolder(ViewHolder holder, int position) {
 
-			ClassicIdenticonTile.Tiles tile = ClassicIdenticonTile.all[position];
+			ClassicIdenticonTile.Tiles tile = ClassicIdenticonTile.INSTANCE.getAll()[position];
 			holder.tileView.setTile(tile);
 
 			String text = String.format("%s - %s%s", position, tile.name(), position % 4 == 0 ? "*" : "");
@@ -84,7 +84,7 @@ public class ClassicTilesFragment extends Fragment {
 
 		@Override
 		public int getItemCount() {
-			return ClassicIdenticonTile.all.length;
+			return ClassicIdenticonTile.INSTANCE.getAll().length;
 		}
 	}
 

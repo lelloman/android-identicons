@@ -19,8 +19,8 @@ import com.lelloman.demo.fragment.GithubIdenticonFragment;
 import com.lelloman.demo.fragment.IdenticonFragment;
 import com.lelloman.demo.fragment.classicidenticon.RandomClassicIdenticonFragment;
 import com.lelloman.demo.fragment.classicidenticon.SequenceClassicIdenticonFragment;
-import com.lelloman.identicon.classic.ClassicIdenticonDrawable;
-import com.lelloman.identicon.github.GithubIdenticonDrawable;
+import com.lelloman.identicon.drawable.ClassicIdenticonDrawable;
+import com.lelloman.identicon.drawable.GithubIdenticonDrawable;
 
 public class MainActivity extends AppCompatActivity implements IdenticonFragment.IdenticonFragmentListener {
 

@@ -13,9 +13,9 @@ import android.widget.NumberPicker;
 
 import com.lelloman.demo.R;
 import com.lelloman.demo.activity.DetailActivity;
-import com.lelloman.identicon.IdenticonDrawable;
-import com.lelloman.identicon.classic.ClassicIdenticonDrawable;
-import com.lelloman.identicon.github.GithubIdenticonDrawable;
+import com.lelloman.identicon.drawable.IdenticonDrawable;
+import com.lelloman.identicon.drawable.ClassicIdenticonDrawable;
+import com.lelloman.identicon.drawable.GithubIdenticonDrawable;
 
 import java.io.File;
 import java.io.FileOutputStream;

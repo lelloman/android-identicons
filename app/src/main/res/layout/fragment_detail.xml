@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.lelloman.identicon.IdenticonView
+    <com.lelloman.identicon.view.IdenticonView
         android:id="@+id/identicon_view"
         android:layout_width="240dp"
         android:layout_height="240dp"

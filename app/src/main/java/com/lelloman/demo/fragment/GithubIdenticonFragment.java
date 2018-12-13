@@ -1,7 +1,7 @@
 package com.lelloman.demo.fragment;
 
-import com.lelloman.identicon.IdenticonDrawable;
-import com.lelloman.identicon.github.GithubIdenticonDrawable;
+import com.lelloman.identicon.drawable.IdenticonDrawable;
+import com.lelloman.identicon.drawable.GithubIdenticonDrawable;
 
 
 public class GithubIdenticonFragment extends IdenticonFragment {
