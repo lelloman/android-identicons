@@ -3,7 +3,9 @@ package com.lelloman.identicon.view
 import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import android.widget.ImageView
+import com.lelloman.identicon.R
 import com.lelloman.identicon.drawable.IdenticonDrawable
 
 /**
@@ -25,6 +27,19 @@ abstract class IdenticonView @JvmOverloads constructor(
             }
         }
     private var identiconDrawable: IdenticonDrawable? = null
+
+    init {
+        if (attrs != null) {
+            val a = context.obtainStyledAttributes(attrs, R.styleable.IdenticonView)
+            try {
+                hash = a.getInt(R.styleable.IdenticonView_hash, hash)
+            } catch (exception: Throwable) {
+                Log.w(javaClass.simpleName, "Something went wrong when initializing ${javaClass.name} $this")
+            } finally {
+                a.recycle()
+            }
+        }
+    }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)

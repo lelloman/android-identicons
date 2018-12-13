@@ -9,13 +9,23 @@ allprojects {
     }
 }
 ```
-then in the module `build.gradle`
+in the module `build.gradle`
 ```groovy
-implementation 'com.github.lelloman:android-identicons:v10'
+implementation 'com.github.lelloman:android-identicons:v11'
+```
+then use one of the 2 View available:
+```xml
+<com.lelloman.identicon.view.ClassicIdenticonView
+    android:layout_width="96dp"
+    android:layout_height="96dp"
+    app:hash="1867167182" />
+
+<com.lelloman.identicon.view.GithubIdenticonView
+    android:layout_width="96dp"
+    android:layout_height="96dp"
+    app:hash="654984321" />
 ```
 ![identicons](https://github.com/lelloman/android-identicons/blob/master/meta/identicons.png)
-
-there is also a github-like version ^_^
 
 ![identicons](https://github.com/lelloman/android-identicons/blob/master/meta/githubbicons.png)
 
