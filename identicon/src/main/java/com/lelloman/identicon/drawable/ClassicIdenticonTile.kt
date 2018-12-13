@@ -10,8 +10,8 @@ import com.lelloman.identicon.util.TileMeasures
 
 /**
  * Collection of all shapes, 32 of them in total.
- * the tiles at positions %4 = 0 are symmetric in both axis
- * and are the ones that can be used as central tile
+ * The tiles at positions %4 = 0 are symmetric in both axis
+ * and are the ones that can be used as central tile.
  */
 object ClassicIdenticonTile {
 
@@ -36,7 +36,7 @@ object ClassicIdenticonTile {
 
         Tiles.FOUR_TRIANGLES_STAR, Tiles.BIG_TRIANGLE_TIP, Tiles.DIAMOND, Tiles.TWO_OPPOSITE_TRIANGLES_BIG)
 
-    enum class Tiles private constructor(private val drawer: TileDrawer) {
+    enum class Tiles(private val drawer: TileDrawer) {
         FOUR_SQUARES(object : TileDrawer() {
             override// 1
             fun onDraw(path: Path2, meas: TileMeasures) {

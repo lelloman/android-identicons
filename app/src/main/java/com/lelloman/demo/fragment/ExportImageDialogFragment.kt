@@ -2,40 +2,34 @@ package com.lelloman.demo.fragment
 
 import android.app.AlertDialog
 import android.app.Dialog
-import android.app.DialogFragment
 import android.content.Context
-import android.content.DialogInterface
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
+import android.support.v4.app.DialogFragment
+import android.support.v4.content.FileProvider
 import android.widget.NumberPicker
-
 import com.lelloman.demo.R
 import com.lelloman.demo.activity.DetailActivity
-import com.lelloman.identicon.drawable.IdenticonDrawable
 import com.lelloman.identicon.drawable.ClassicIdenticonDrawable
 import com.lelloman.identicon.drawable.GithubIdenticonDrawable
-
+import com.lelloman.identicon.drawable.IdenticonDrawable
 import java.io.File
 import java.io.FileOutputStream
 
 class ExportImageDialogFragment : DialogFragment() {
 
-    private var mListener: ExportImageListener? = null
-
-    interface ExportImageListener {
-        fun onImageCreated(uri: Uri)
-    }
+    private var listener: ExportImageListener? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        mListener = context as ExportImageListener
+        listener = context as ExportImageListener
     }
 
     override fun onDetach() {
         super.onDetach()
-        mListener = null
+        listener = null
     }
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
@@ -52,14 +46,13 @@ class ExportImageDialogFragment : DialogFragment() {
         return AlertDialog.Builder(context)
             .setTitle(R.string.select_size)
             .setView(view)
-            .setPositiveButton(android.R.string.ok) { dialogInterface, i -> onSizeSelected(SIZES[view.value]) }
+            .setPositiveButton(android.R.string.ok) { _, _ -> onSizeSelected(SIZES[view.value]) }
             .setNegativeButton(android.R.string.cancel, null)
             .create()
     }
 
     private fun onSizeSelected(size: Int) {
-
-        val args = arguments
+        val args = arguments ?: throw IllegalStateException("Fragment argument cannot be null.")
         val type = args.getInt(ARG_TYPE, DetailActivity.TYPE_CLASSIC)
         val hash = args.getInt(ARG_HASH)
 
@@ -72,15 +65,16 @@ class ExportImageDialogFragment : DialogFragment() {
 
         val context = activity
 
-        val file = File(context.externalCacheDir, filename)
+        val file = File(context!!.cacheDir, filename)
         try {
             file.createNewFile()
             val fos = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, fos)
             fos.close()
 
-            if (mListener != null) {
-                mListener!!.onImageCreated(Uri.fromFile(file))
+            if (listener != null) {
+                val uri = FileProvider.getUriForFile(context, context.packageName + ".provider", file)
+                listener!!.onImageCreated(uri)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -108,8 +102,8 @@ class ExportImageDialogFragment : DialogFragment() {
             }
         }
 
-        private val ARG_HASH = "hash"
-        private val ARG_TYPE = "type"
+        private const val ARG_HASH = "hash"
+        private const val ARG_TYPE = "type"
 
         fun newInstance(hash: Int, type: Int): ExportImageDialogFragment {
             val output = ExportImageDialogFragment()
@@ -121,5 +115,9 @@ class ExportImageDialogFragment : DialogFragment() {
 
             return output
         }
+    }
+
+    interface ExportImageListener {
+        fun onImageCreated(uri: Uri)
     }
 }

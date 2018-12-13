@@ -3,7 +3,6 @@ package com.lelloman.demo.fragment.classicidenticon
 import com.lelloman.demo.fragment.IdenticonFragment
 import com.lelloman.identicon.drawable.ClassicIdenticonDrawable
 
-
 abstract class ClassicIdenticonFragment : IdenticonFragment() {
 
     override val adapter = object : IdenticonFragment.RecyclerViewAdapter() {

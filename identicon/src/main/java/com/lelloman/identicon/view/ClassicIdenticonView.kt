@@ -5,6 +5,7 @@ import android.util.AttributeSet
 
 import com.lelloman.identicon.drawable.ClassicIdenticonDrawable
 
+@Suppress("unused")
 class ClassicIdenticonView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null

@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable
 
 /**
  * Basically a [Bitmap] wrapper, the [Bitmap] size must be known when instantiating it
- * but when drawing it will draw the [Bitmap] to fit the canvas
+ * but when drawing it will draw the [Bitmap] to fit the canvas.
  */
 abstract class IdenticonDrawable(
     desiredWidth: Int,
@@ -20,7 +20,7 @@ abstract class IdenticonDrawable(
 
     private val bitmapRect: Rect
     private val destinationRect: Rect
-    val bitmap: Bitmap
+    private val bitmap: Bitmap
     private val canvas: Canvas
     private val bitmapPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     val width: Int

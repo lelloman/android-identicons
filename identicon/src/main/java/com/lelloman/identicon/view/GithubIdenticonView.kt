@@ -5,6 +5,7 @@ import android.util.AttributeSet
 
 import com.lelloman.identicon.drawable.GithubIdenticonDrawable
 
+@Suppress("unused")
 class GithubIdenticonView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null

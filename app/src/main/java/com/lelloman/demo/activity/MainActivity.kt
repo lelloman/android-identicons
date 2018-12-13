@@ -9,7 +9,6 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import android.transition.Explode
-import android.transition.Transition
 import android.view.Window
 import android.widget.ImageView
 import com.lelloman.demo.R
@@ -42,13 +41,12 @@ class MainActivity : AppCompatActivity(), IdenticonFragment.IdenticonFragmentLis
             }
 
             override fun getItem(position: Int): Fragment? {
-                try {
-                    return fragments[position].newInstance()
+                return try {
+                    fragments[position].newInstance()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    return null
+                    null
                 }
-
             }
 
             override fun getPageTitle(position: Int): CharSequence? {
@@ -58,15 +56,16 @@ class MainActivity : AppCompatActivity(), IdenticonFragment.IdenticonFragmentLis
     }
 
     override fun onIdenticonSelected(hash: Int, identiconView: ImageView, fragment: IdenticonFragment) {
-        val intent = Intent(this, DetailActivity::class.java)
-        intent.putExtra(DetailActivity.EXTRA_TRANSITION_NAME, hash.toString())
-        intent.putExtra(DetailActivity.EXTRA_HASH, hash)
-        val drawable = identiconView.drawable
-        if (drawable is GithubIdenticonDrawable) {
-            intent.putExtra(DetailActivity.EXTRA_IDENTICON_TYPE, DetailActivity.TYPE_GITHUB)
-        } else if (drawable is ClassicIdenticonDrawable) {
-            intent.putExtra(DetailActivity.EXTRA_IDENTICON_TYPE, DetailActivity.TYPE_CLASSIC)
+        val type = when (identiconView.drawable) {
+            is GithubIdenticonDrawable -> DetailActivity.TYPE_GITHUB
+            is ClassicIdenticonDrawable -> DetailActivity.TYPE_CLASSIC
+            else -> DetailActivity.TYPE_CLASSIC
         }
+
+        val intent = Intent(this, DetailActivity::class.java)
+            .putExtra(DetailActivity.EXTRA_TRANSITION_NAME, hash.toString())
+            .putExtra(DetailActivity.EXTRA_HASH, hash)
+            .putExtra(DetailActivity.EXTRA_IDENTICON_TYPE, type)
 
         val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, identiconView, hash.toString())
 

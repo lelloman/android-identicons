@@ -37,8 +37,9 @@ abstract class IdenticonFragment : Fragment() {
                 super.onSizeChanged(w, h, oldw, oldh)
                 if (w != 0) {
                     val columns = (w / (resources.displayMetrics.density * 64)).toInt()
-                    layoutManager = GridLayoutManager(context, columns, GridLayoutManager.VERTICAL, false)
-                    layoutManager!!.scrollToPosition(Integer.MAX_VALUE / 2)
+                    layoutManager = GridLayoutManager(context, columns, GridLayoutManager.VERTICAL, false).apply {
+                        scrollToPosition(Integer.MAX_VALUE / 2)
+                    }
                 }
             }
         }
@@ -48,6 +49,10 @@ abstract class IdenticonFragment : Fragment() {
 
 
         return recyclerView
+    }
+
+    companion object {
+        val RANDOM = Random()
     }
 
     abstract inner class RecyclerViewAdapter : RecyclerView.Adapter<ViewHolder>() {
@@ -63,7 +68,6 @@ abstract class IdenticonFragment : Fragment() {
                 }
             }
             view.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-
             return ViewHolder(view)
         }
 
@@ -74,9 +78,7 @@ abstract class IdenticonFragment : Fragment() {
             ViewCompat.setTransitionName(holder.identiconView, hash.toString())
         }
 
-        override fun getItemCount(): Int {
-            return Integer.MAX_VALUE
-        }
+        override fun getItemCount() = Integer.MAX_VALUE
 
         protected abstract fun getHashForPosition(position: Int): Int
         protected abstract fun makeIdenticonDrawable(width: Int, height: Int, hash: Int): IdenticonDrawable
@@ -93,14 +95,8 @@ abstract class IdenticonFragment : Fragment() {
 
         override fun onClick(view: View) {
             identiconView.transitionName = hash.toString()
-            listener?.let { listener ->
-                listener.onIdenticonSelected(hash, identiconView, this@IdenticonFragment)
-            }
+            listener?.onIdenticonSelected(hash, identiconView, this@IdenticonFragment)
         }
-    }
-
-    companion object {
-        val RANDOM = Random()
     }
 
     interface IdenticonFragmentListener {

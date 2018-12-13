@@ -77,13 +77,14 @@ class DetailActivity : AppCompatActivity(), ExportImageDialogFragment.ExportImag
 
     private fun exportImage() {
         val fragment = ExportImageDialogFragment.newInstance(hash, type)
-        fragment.show(fragmentManager, ExportImageDialogFragment::class.java.simpleName)
+        fragment.show(supportFragmentManager, ExportImageDialogFragment::class.java.simpleName)
     }
 
     override fun onImageCreated(uri: Uri) {
         val shareIntent = Intent(Intent.ACTION_SEND)
             .setType("image/png")
             .putExtra(Intent.EXTRA_STREAM, uri)
+            .addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         startActivity(Intent.createChooser(shareIntent, "Share Image"))
     }
 

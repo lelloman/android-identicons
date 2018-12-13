@@ -1,5 +1,6 @@
 package com.lelloman.demo.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -63,14 +64,14 @@ class ClassicTilesFragment : Fragment() {
             return ViewHolder(view)
         }
 
+        @SuppressLint("SetTextI18n")
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            ClassicIdenticonTile.all[position].let { tile ->
+                holder.tileView.setTile(tile)
 
-            val tile = ClassicIdenticonTile.all[position]
-            holder.tileView.setTile(tile)
-
-            val text = String.format("%s - %s%s", position, tile.name, if (position % 4 == 0) "*" else "")
-            holder.textView.setText(text)
-
+                val suffix = if (position % 4 == 0) "*" else ""
+                holder.textView.text = "$position - ${tile.name}$suffix"
+            }
         }
 
         override fun getItemCount(): Int {
@@ -79,31 +80,21 @@ class ClassicTilesFragment : Fragment() {
     }
 
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tileView: TileView
-        val textView: TextView
-
-        init {
-            tileView = view.findViewById<View>(TILE_VIEW_ID) as TileView
-            textView = view.findViewById<View>(TEXT_VIEW_ID) as TextView
-        }
+        val tileView: TileView = view.findViewById<View>(TILE_VIEW_ID) as TileView
+        val textView: TextView = view.findViewById<View>(TEXT_VIEW_ID) as TextView
     }
 
     class TileView(context: Context) : View(context) {
 
-        internal var whitePaint: Paint
-        internal var blackPaint: Paint
-        internal var tile: ClassicIdenticonTile.Tiles? = null
-
-        init {
-
-            whitePaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            whitePaint.color = -0x1
-            whitePaint.style = Paint.Style.FILL
-
-            blackPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-            blackPaint.color = -0x1000000
-            blackPaint.style = Paint.Style.FILL
+        private var whitePaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = -0x1
+            style = Paint.Style.FILL
         }
+        private var blackPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = -0x1000000
+            style = Paint.Style.FILL
+        }
+        private var tile: ClassicIdenticonTile.Tiles? = null
 
         fun setTile(tile: ClassicIdenticonTile.Tiles) {
             this.tile = tile
@@ -112,18 +103,15 @@ class ClassicTilesFragment : Fragment() {
 
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
-            if (tile == null)
-                return
-
-            val measures = TileMeasures(canvas.width, canvas.height)
-
-            tile!!.draw(canvas, measures, 0, whitePaint, blackPaint)
+            tile?.let { tile ->
+                val measures = TileMeasures(canvas.width, canvas.height)
+                tile.draw(canvas, measures, 0, whitePaint, blackPaint)
+            }
         }
     }
 
     companion object {
-
-        val TILE_VIEW_ID = 1
-        val TEXT_VIEW_ID = 2
+        const val TILE_VIEW_ID = 1
+        const val TEXT_VIEW_ID = 2
     }
 }

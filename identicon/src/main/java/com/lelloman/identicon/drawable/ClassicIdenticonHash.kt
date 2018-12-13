@@ -4,9 +4,9 @@ package com.lelloman.identicon.drawable
 /**
  * Provides the values for a classic identicon using an int
  */
-class ClassicIdenticonHash(val value: Int) {
+class ClassicIdenticonHash(value: Int) {
 
-    private val values: IntArray
+    private val values: IntArray = IntArray(11)
 
     val middle: Int
         get() = values[0]
@@ -42,8 +42,6 @@ class ClassicIdenticonHash(val value: Int) {
         get() = values[10]
 
     init {
-
-        values = IntArray(11)
 
         // middle tile
         values[0] = positiveMod(value.toLong(), 8) * 4
@@ -81,9 +79,6 @@ class ClassicIdenticonHash(val value: Int) {
     }
 
     companion object {
-
-        fun positiveMod(i: Long, m: Int): Int {
-            return Math.abs((i % m).toInt())
-        }
+        fun positiveMod(i: Long, m: Int) = Math.abs((i % m).toInt())
     }
 }
