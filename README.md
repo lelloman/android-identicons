@@ -11,7 +11,7 @@ allprojects {
 ```
 then in the module `build.gradle`
 ```groovy
-compile 'com.github.lelloman:android-identicons:v7'
+implementation 'com.github.lelloman:android-identicons:v10'
 ```
 ![identicons](https://github.com/lelloman/android-identicons/blob/master/meta/identicons.png)
 
