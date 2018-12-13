@@ -4,9 +4,11 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Path
 
-import com.lelloman.identicon.util.Path2
 import com.lelloman.identicon.util.TileDrawer
 import com.lelloman.identicon.util.TileMeasures
+import com.lelloman.identicon.util.addPolygon
+import com.lelloman.identicon.util.addRectangle
+import com.lelloman.identicon.util.addTriangle
 
 /**
  * Collection of all shapes, 32 of them in total.
@@ -36,226 +38,178 @@ object ClassicIdenticonTile {
 
         Tiles.FOUR_TRIANGLES_STAR, Tiles.BIG_TRIANGLE_TIP, Tiles.DIAMOND, Tiles.TWO_OPPOSITE_TRIANGLES_BIG)
 
-    enum class Tiles(private val drawer: TileDrawer) {
-        FOUR_SQUARES(object : TileDrawer() {
-            override// 1
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addRectangle(0, 0, meas.w3, meas.h3)
-                path.addRectangle(meas.w32, 0, meas.width, meas.h3)
-                path.addRectangle(0, meas.h32, meas.w3, meas.height)
-                path.addRectangle(meas.w32, meas.h32, meas.width, meas.height)
-            }
+    enum class Tiles(drawer: (Path, TileMeasures) -> Unit) {
+        // 1
+        FOUR_SQUARES({ path, meas ->
+            path.addRectangle(0, 0, meas.w3, meas.h3)
+            path.addRectangle(meas.w32, 0, meas.width, meas.h3)
+            path.addRectangle(0, meas.h32, meas.w3, meas.height)
+            path.addRectangle(meas.w32, meas.h32, meas.width, meas.height)
         }),
+        // 2
+        HALF_SQUARE_TRIANGLE({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, 0, meas.height)
+        }),
+        // 3
+        BIG_TRIANGLE({ path, meas ->
+            path.addTriangle(meas.wMid, 0, 0, meas.height, meas.width, meas.height)
+        }),
+        // 4
+        HALF_SQUARE_RECTANGLE({ path, meas ->
+            path.addRectangle(0, 0, meas.wMid, meas.height)
+        }),
+        // 5
+        ROTATED_SQUARE({ path, meas ->
+            path.addPolygon(meas.wMid, 0, meas.width, meas.hMid, meas.wMid, meas.height, 0, meas.hMid)
+        }),
+        // 6
+        SPEAR_TIP({ path, meas ->
+            path.addPolygon(0, 0, meas.width, meas.hMid, meas.width, meas.height, meas.wMid, meas.height)
+        }),
+        // 7
+        THREE_TRIANGLES({ path, meas ->
+            path.addTriangle(meas.wMid, 0, meas.w43, meas.hMid, meas.w4, meas.hMid)
+            path.addTriangle(0, meas.height, meas.w4, meas.hMid, meas.wMid, meas.height)
+            path.addTriangle(meas.width, meas.height, meas.w43, meas.hMid, meas.wMid, meas.height)
+        }),
+        // 8
+        SLIM_TRIANGLE({ path, meas ->
+            path.addTriangle(0, 0, meas.width, meas.hMid, meas.wMid, meas.height)
+        }),
+        // 9
+        LITTLE_SQUARE({ path, meas ->
+            path.addRectangle(meas.w4, meas.h4, meas.w43, meas.h43)
+        }),
+        // 10
+        TWO_TRIANGLES({ path, meas ->
+            path.addTriangle(0, meas.height, 0, meas.hMid, meas.wMid, meas.hMid)
+            path.addTriangle(meas.width, 0, meas.wMid, 0, meas.wMid, meas.hMid)
+        }),
+        // 11
+        LITTLE_SIDE_SQUARE({ path, meas ->
+            path.addRectangle(0, 0, meas.wMid, meas.hMid)
+        }),
+        // 12
+        MARLBORO_TRIANGLE({ path, meas ->
+            path.addTriangle(0, meas.height, meas.width, meas.height, meas.wMid, meas.hMid)
+        }),
+        // 13
+        FOUR_TRIANGLES({ path, meas ->
+            path.addTriangle(meas.wMid, 0, meas.w4, meas.h4, meas.w43, meas.h4)
+            path.addTriangle(meas.width, meas.hMid, meas.w43, meas.h43, meas.w43, meas.h4)
+            path.addTriangle(meas.wMid, meas.height, meas.w4, meas.h43, meas.w43, meas.h43)
+            path.addTriangle(0, meas.hMid, meas.w4, meas.h4, meas.w4, meas.h43)
+        }),
+        // 14
+        LITTLE_TRIANGLE_INSIDE({ path, meas ->
+            path.addTriangle(meas.wMid, 0, meas.wMid, meas.hMid, 0, meas.hMid)
+        }),
+        // 15
+        LITTLE_TRIANGLE_TIP({ path, meas ->
+            path.addTriangle(meas.wMid, 0, 0, meas.hMid, 0, 0)
+        }),
+        // 16
+        TWO_SQUARES_DIAGONAL({ path, meas ->
+            path.addRectangle(0, 0, meas.wMid, meas.hMid)
+            path.addRectangle(meas.wMid, meas.hMid, meas.width, meas.height)
+        }),
+        // 17
+        LITTLE_ROTATED_SQUARE({ path, meas ->
+            path.addPolygon(meas.wMid, meas.h4, meas.w43, meas.hMid, meas.wMid, meas.h43, meas.w4, meas.hMid)
+        }),
+        // 18
+        SHIFTED_MARLBORO_TRIANGLE({ path, meas ->
+            path.addTriangle(meas.wMid, 0, meas.width, meas.hMid, 0, meas.hMid)
+        }),
+        // 19
+        TUNNELING_TRIANGLES({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, 0, meas.hMid)
+            path.addTriangle(meas.width, meas.height, 0, meas.height, meas.width, meas.hMid)
+        }),
+        // 20
+        TWO_TIPS_TRIANGLES({ path, meas ->
+            path.addTriangle(meas.wMid, 0, 0, meas.hMid, 0, 0)
+            path.addTriangle(meas.wMid, meas.height, meas.width, meas.hMid, meas.width, meas.height)
+        }),
+        // 21
+        FOUR_TRIANGLES_FACING_CENTER({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.h3)
+            path.addTriangle(meas.width, 0, meas.width, meas.height, meas.w32, meas.hMid)
+            path.addTriangle(meas.width, meas.height, 0, meas.height, meas.wMid, meas.h32)
+            path.addTriangle(0, meas.height, 0, 0, meas.w3, meas.hMid)
+        }),
+        // 22
+        TWO_SQUARES_STRAIGHT_LINE({ path, meas ->
+            path.addPolygon(meas.wMid, 0, meas.w43, meas.h4, meas.wMid, meas.hMid, meas.w4, meas.h4)
+            path.addPolygon(meas.wMid, meas.hMid, meas.w43, meas.h43, meas.wMid, meas.height, meas.w4, meas.h43)
+        }),
+        // 23
+        TWO_TRAPEZOIDS({ path, meas ->
+            path.addPolygon(0, 0, meas.wMid, 0, meas.wMid, meas.h4, 0, meas.hMid)
+            path.addPolygon(meas.width, meas.height, meas.width, meas.hMid, meas.wMid, meas.h43, meas.wMid, meas.height)
+        }),
+        // 24
+        ARROW({ path, meas ->
+            path.addPolygon(meas.width, 0, meas.wMid, meas.hMid, meas.width, meas.height, 0, meas.hMid)
+        }),
+        // 25
+        ROTATE_SQUARE_WITH_HOLE({ path, meas ->
+            path.fillType = Path.FillType.EVEN_ODD
 
-        HALF_SQUARE_TRIANGLE(object : TileDrawer() {
-            override// 2
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, 0, 0, meas.height)
-            }
-        }),
-        BIG_TRIANGLE(object : TileDrawer() {
-            override// 3
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, 0, meas.height, meas.width, meas.height)
-            }
-        }),
-        HALF_SQUARE_RECTANGLE(object : TileDrawer() {
-            override// 4
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addRectangle(0, 0, meas.wMid, meas.height)
-            }
-        }),
-        ROTATED_SQUARE(object : TileDrawer() {
-            override// 5
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(meas.wMid, 0, meas.width, meas.hMid, meas.wMid, meas.height, 0, meas.hMid)
-            }
-        }),
-        SPEAR_TIP(object : TileDrawer() {
-            override// 6
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(0, 0, meas.width, meas.hMid, meas.width, meas.height, meas.wMid, meas.height)
-            }
-        }),
-        THREE_TRIANGLES(object : TileDrawer() {
-            override// 7
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, meas.w43, meas.hMid, meas.w4, meas.hMid)
-                path.addTriangle(0, meas.height, meas.w4, meas.hMid, meas.wMid, meas.height)
-                path.addTriangle(meas.width, meas.height, meas.w43, meas.hMid, meas.wMid, meas.height)
-            }
-        }),
-        SLIM_TRIANGLE(object : TileDrawer() {
-            override// 8
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, meas.hMid, meas.wMid, meas.height)
-            }
-        }),
-        LITTLE_SQUARE(object : TileDrawer() {
-            override// 9
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addRectangle(meas.w4, meas.h4, meas.w43, meas.h43)
-            }
-        }),
-        TWO_TRIANGLES(object : TileDrawer() {
-            override// 10
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, meas.height, 0, meas.hMid, meas.wMid, meas.hMid)
-                path.addTriangle(meas.width, 0, meas.wMid, 0, meas.wMid, meas.hMid)
-            }
-        }),
-        LITTLE_SIDE_SQUARE(object : TileDrawer() {
-            override// 11
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addRectangle(0, 0, meas.wMid, meas.hMid)
-            }
-        }),
-        MARLBORO_TRIANGLE(object : TileDrawer() {
-            override// 13
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, meas.height, meas.width, meas.height, meas.wMid, meas.hMid)
-            }
-        }),
-        FOUR_TRIANGLES(object : TileDrawer() {
-            override// 12
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, meas.w4, meas.h4, meas.w43, meas.h4)
-                path.addTriangle(meas.width, meas.hMid, meas.w43, meas.h43, meas.w43, meas.h4)
-                path.addTriangle(meas.wMid, meas.height, meas.w4, meas.h43, meas.w43, meas.h43)
-                path.addTriangle(0, meas.hMid, meas.w4, meas.h4, meas.w4, meas.h43)
-            }
-        }),
-        LITTLE_TRIANGLE_INSIDE(object : TileDrawer() {
-            override// 14
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, meas.wMid, meas.hMid, 0, meas.hMid)
-            }
-        }),
-        LITTLE_TRIANGLE_TIP(object : TileDrawer() {
-            override// 15
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, 0, meas.hMid, 0, 0)
-            }
-        }),
-        TWO_SQUARES_DIAGONAL(object : TileDrawer() {
-            override// 16
-            fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addRectangle(0, 0, meas.wMid, meas.hMid)
-                path.addRectangle(meas.wMid, meas.hMid, meas.width, meas.height)
-            }
-        }),
-        LITTLE_ROTATED_SQUARE(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(meas.wMid, meas.h4, meas.w43, meas.hMid, meas.wMid, meas.h43, meas.w4, meas.hMid)
-            }
-        }),
-        SHIFTED_MARLBORO_TRIANGLE(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, meas.width, meas.hMid, 0, meas.hMid)
-            }
-        }),
-        TUNNELING_TRIANGLES(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, 0, 0, meas.hMid)
-                path.addTriangle(meas.width, meas.height, 0, meas.height, meas.width, meas.hMid)
-            }
-        }),
-        TWO_TIPS_TRIANGLES(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(meas.wMid, 0, 0, meas.hMid, 0, 0)
-                path.addTriangle(meas.wMid, meas.height, meas.width, meas.hMid, meas.width, meas.height)
-            }
-        }),
-        FOUR_TRIANGLES_FACING_CENTER(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.h3)
-                path.addTriangle(meas.width, 0, meas.width, meas.height, meas.w32, meas.hMid)
-                path.addTriangle(meas.width, meas.height, 0, meas.height, meas.wMid, meas.h32)
-                path.addTriangle(0, meas.height, 0, 0, meas.w3, meas.hMid)
-            }
-        }),
-        TWO_SQUARES_STRAIGHT_LINE(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(meas.wMid, 0, meas.w43, meas.h4, meas.wMid, meas.hMid, meas.w4, meas.h4)
-                path.addPolygon(meas.wMid, meas.hMid, meas.w43, meas.h43, meas.wMid, meas.height, meas.w4, meas.h43)
-            }
-        }),
-        TWO_TRAPEZOIDS(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(0, 0, meas.wMid, 0, meas.wMid, meas.h4, 0, meas.hMid)
-                path.addPolygon(meas.width, meas.height, meas.width, meas.hMid, meas.wMid, meas.h43, meas.wMid, meas.height)
-            }
-        }),
-        ARROW(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(meas.width, 0, meas.wMid, meas.hMid, meas.width, meas.height, 0, meas.hMid)
-            }
-        }),
-        ROTATE_SQUARE_WITH_HOLE(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
+            path.moveTo(meas.wMid.toFloat(), 0f)
+            path.lineTo(meas.width.toFloat(), meas.hMid.toFloat())
+            path.lineTo(meas.wMid.toFloat(), meas.height.toFloat())
+            path.lineTo(0f, meas.hMid.toFloat())
+            path.lineTo(meas.wMid.toFloat(), 0f)
+            path.close()
 
-                path.fillType = Path.FillType.EVEN_ODD
-
-                path.moveTo(meas.wMid.toFloat(), 0f)
-                path.lineTo(meas.width.toFloat(), meas.hMid.toFloat())
-                path.lineTo(meas.wMid.toFloat(), meas.height.toFloat())
-                path.lineTo(0f, meas.hMid.toFloat())
-                path.lineTo(meas.wMid.toFloat(), 0f)
-                path.close()
-
-                path.moveTo(meas.wMid.toFloat(), meas.h4.toFloat())
-                path.lineTo(meas.w43.toFloat(), meas.hMid.toFloat())
-                path.lineTo(meas.wMid.toFloat(), meas.h43.toFloat())
-                path.lineTo(meas.w4.toFloat(), meas.hMid.toFloat())
-                path.lineTo(meas.wMid.toFloat(), meas.h4.toFloat())
-                path.close()
-            }
+            path.moveTo(meas.wMid.toFloat(), meas.h4.toFloat())
+            path.lineTo(meas.w43.toFloat(), meas.hMid.toFloat())
+            path.lineTo(meas.wMid.toFloat(), meas.h43.toFloat())
+            path.lineTo(meas.w4.toFloat(), meas.hMid.toFloat())
+            path.lineTo(meas.wMid.toFloat(), meas.h4.toFloat())
+            path.close()
         }),
-        TWO_OPPOSITE_TRIANGLES(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.h4)
-                path.addTriangle(meas.width, meas.height, 0, meas.height, meas.wMid, meas.h43)
-            }
+        // 26
+        TWO_OPPOSITE_TRIANGLES({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.h4)
+            path.addTriangle(meas.width, meas.height, 0, meas.height, meas.wMid, meas.h43)
         }),
-        TRIANGLE_SANDWICH(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.h4)
-                path.addPolygon(meas.wMid, meas.h4, meas.w4, meas.hMid, meas.wMid, meas.h43, meas.w43, meas.hMid)
-                path.addTriangle(meas.width, meas.height, 0, meas.height, meas.wMid, meas.h43)
-            }
+        // 27
+        TRIANGLE_SANDWICH({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.h4)
+            path.addPolygon(meas.wMid, meas.h4, meas.w4, meas.hMid, meas.wMid, meas.h43, meas.w43, meas.hMid)
+            path.addTriangle(meas.width, meas.height, 0, meas.height, meas.wMid, meas.h43)
         }),
-        SPIKE(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, meas.hMid, meas.width, meas.height)
-            }
+        // 28
+        SPIKE({ path, meas ->
+            path.addTriangle(0, 0, meas.width, meas.hMid, meas.width, meas.height)
         }),
-        FOUR_TRIANGLES_STAR(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.wMid, meas.h4, meas.w4, meas.hMid)
-                path.addTriangle(meas.width, 0, meas.w43, meas.hMid, meas.wMid, meas.h4)
-                path.addTriangle(meas.width, meas.height, meas.wMid, meas.h43, meas.w43, meas.hMid)
-                path.addTriangle(0, meas.height, meas.w4, meas.hMid, meas.wMid, meas.h43)
-            }
+        // 29
+        FOUR_TRIANGLES_STAR({ path, meas ->
+            path.addTriangle(0, 0, meas.wMid, meas.h4, meas.w4, meas.hMid)
+            path.addTriangle(meas.width, 0, meas.w43, meas.hMid, meas.wMid, meas.h4)
+            path.addTriangle(meas.width, meas.height, meas.wMid, meas.h43, meas.w43, meas.hMid)
+            path.addTriangle(0, meas.height, meas.w4, meas.hMid, meas.wMid, meas.h43)
         }),
-        BIG_TRIANGLE_TIP(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.width, 0, 0, meas.hMid)
-            }
+        // 30
+        BIG_TRIANGLE_TIP({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, 0, meas.hMid)
         }),
-        DIAMOND(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addPolygon(0, meas.hMid, meas.wMid, meas.h4, meas.width, meas.hMid, meas.wMid, meas.h43)
-            }
+        // 31
+        DIAMOND({ path, meas ->
+            path.addPolygon(0, meas.hMid, meas.wMid, meas.h4, meas.width, meas.hMid, meas.wMid, meas.h43)
         }),
-        TWO_OPPOSITE_TRIANGLES_BIG(object : TileDrawer() {
-            override fun onDraw(path: Path2, meas: TileMeasures) {
-                path.addTriangle(0, 0, meas.wMid, meas.hMid, 0, meas.height)
-                path.addTriangle(meas.width, 0, meas.wMid, meas.hMid, meas.width, meas.height)
-            }
+        // 32
+        TWO_OPPOSITE_TRIANGLES_BIG({ path, meas ->
+            path.addTriangle(0, 0, meas.wMid, meas.hMid, 0, meas.height)
+            path.addTriangle(meas.width, 0, meas.wMid, meas.hMid, meas.width, meas.height)
         });
 
+        private val tileDrawer = TileDrawer(drawer)
+
         fun draw(canvas: Canvas, measures: TileMeasures, rotation: Int, bgPaint: Paint, fgPaint: Paint) {
-            drawer.draw(canvas, measures, rotation, bgPaint, fgPaint)
+            tileDrawer.draw(canvas, measures, rotation, bgPaint, fgPaint)
         }
     }
 }

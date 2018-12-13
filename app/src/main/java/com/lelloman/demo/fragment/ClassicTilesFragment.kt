@@ -101,6 +101,7 @@ class ClassicTilesFragment : Fragment() {
             invalidate()
         }
 
+        @SuppressLint("CanvasSize", "DrawAllocation")
         override fun onDraw(canvas: Canvas) {
             super.onDraw(canvas)
             tile?.let { tile ->
