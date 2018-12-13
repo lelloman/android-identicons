@@ -7,15 +7,6 @@
     android:orientation="vertical"
     tools:context=".activity.DetailActivity">
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:attr/colorPrimary"
-        android:minHeight="?android:attr/actionBarSize"
-        android:popupTheme="@android:style/ThemeOverlay.Material.Light"
-        android:theme="@android:style/ThemeOverlay.Material.Dark.ActionBar"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"

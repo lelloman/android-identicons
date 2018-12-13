@@ -5,7 +5,6 @@ import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.ViewTreeObserver
@@ -21,15 +20,11 @@ class DetailActivity : AppCompatActivity(), ExportImageDialogFragment.ExportImag
     private var hash: Int = 0
     private var type: Int = 0
 
-    private val toolbar by lazy { findViewById<Toolbar>(R.id.toolbar) }
     private val imageView by lazy { findViewById<ImageView>(R.id.image_view) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
-
-        setSupportActionBar(toolbar)
-        supportActionBar!!.title = ""
 
         intent?.let {
             val transitionName = it.getStringExtra(EXTRA_TRANSITION_NAME)
@@ -38,6 +33,8 @@ class DetailActivity : AppCompatActivity(), ExportImageDialogFragment.ExportImag
 
             imageView.transitionName = transitionName
         }
+
+        supportActionBar!!.title = "hash: $hash"
 
         window.decorView.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener {
             override fun onGlobalLayout() {
