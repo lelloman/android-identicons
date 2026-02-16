@@ -6,7 +6,7 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -26,7 +26,7 @@ class ClassicTilesFragment : Fragment() {
 
         recyclerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         recyclerView.adapter = TilesAdapter()
-        recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        recyclerView.layoutManager = GridLayoutManager(context, 4)
 
 
         return recyclerView
@@ -37,15 +37,16 @@ class ClassicTilesFragment : Fragment() {
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
             val view = LinearLayout(context)
-            view.orientation = LinearLayout.HORIZONTAL
+            view.orientation = LinearLayout.VERTICAL
             view.setBackgroundColor(-0x666667)
             view.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            view.gravity = Gravity.CENTER
 
             val tileView = TileView(requireContext())
-            val tileSize = (requireContext().resources.displayMetrics.density * 32).toInt()
-            val tileMargin = tileSize / 4
+            val tileSize = (requireContext().resources.displayMetrics.density * 48).toInt()
+            val tileMargin = tileSize / 6
             var layoutParams = LinearLayout.LayoutParams(tileSize, tileSize)
-            layoutParams.setMargins(tileMargin, tileMargin, tileMargin, tileMargin)
+            layoutParams.setMargins(tileMargin, tileMargin, tileMargin, 0)
             tileView.layoutParams = layoutParams
             tileView.id = TILE_VIEW_ID
 
@@ -53,10 +54,11 @@ class ClassicTilesFragment : Fragment() {
 
             val textView = TextView(context)
             textView.id = TEXT_VIEW_ID
+            textView.textSize = 10f
+            textView.gravity = Gravity.CENTER
 
-            layoutParams = LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT)
-            layoutParams.weight = 1f
-            layoutParams.gravity = Gravity.CENTER
+            layoutParams = LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+            layoutParams.setMargins(0, 0, 0, tileMargin)
             textView.layoutParams = layoutParams
 
             view.addView(textView)
@@ -70,7 +72,7 @@ class ClassicTilesFragment : Fragment() {
                 holder.tileView.setTile(tile)
 
                 val suffix = if (position % 4 == 0) "*" else ""
-                holder.textView.text = "$position - ${tile.name}$suffix"
+                holder.textView.text = "$position$suffix"
             }
         }
 
