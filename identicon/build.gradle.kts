@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     `maven-publish`
 }
 
@@ -29,6 +30,10 @@ android {
         jvmTarget = "17"
     }
 
+    buildFeatures {
+        compose = true
+    }
+
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
@@ -38,6 +43,10 @@ android {
 
 dependencies {
     implementation(libs.appcompat)
+
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    implementation(libs.compose.foundation)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockito.core)

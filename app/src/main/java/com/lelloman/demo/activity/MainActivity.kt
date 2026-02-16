@@ -2,72 +2,83 @@ package com.lelloman.demo.activity
 
 import android.content.Intent
 import android.os.Bundle
-import android.transition.Explode
-import android.view.Window
-import android.widget.ImageView
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityOptionsCompat
-import androidx.fragment.app.Fragment
-import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.google.android.material.tabs.TabLayoutMediator
-import com.lelloman.demo.R
-import com.lelloman.demo.fragment.ClassicTilesFragment
-import com.lelloman.demo.fragment.GithubIdenticonFragment
-import com.lelloman.demo.fragment.IdenticonFragment
-import com.lelloman.demo.fragment.classicidenticon.RandomClassicIdenticonFragment
-import com.lelloman.demo.fragment.classicidenticon.SequenceClassicIdenticonFragment
-import com.lelloman.identicon.drawable.ClassicIdenticonDrawable
-import com.lelloman.identicon.drawable.GithubIdenticonDrawable
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Tab
+import androidx.compose.material3.TabRow
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import com.lelloman.demo.ui.AppTheme
+import com.lelloman.demo.ui.ClassicTilesGrid
+import com.lelloman.demo.ui.IdenticonGrid
+import com.lelloman.demo.ui.IdenticonVariant
+import com.lelloman.demo.ui.TYPE_CLASSIC
+import com.lelloman.demo.ui.TYPE_GITHUB
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), IdenticonFragment.IdenticonFragmentListener {
+class MainActivity : ComponentActivity() {
 
-    internal var fragments = arrayOf(RandomClassicIdenticonFragment::class.java, SequenceClassicIdenticonFragment::class.java, ClassicTilesFragment::class.java, GithubIdenticonFragment::class.java)
-    internal var titles = arrayOf("Random", "Sequence", "Tiles", "Github")
-
+    @OptIn(ExperimentalMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-        window.enterTransition = Explode()
-        window.exitTransition = Explode()
-        setContentView(R.layout.activity_main)
 
-        setSupportActionBar(findViewById(R.id.toolbar))
+        val tabTitles = listOf("Random", "Sequence", "Tiles", "Github")
 
-        val viewPager = findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.view_pager)
-        val tabLayout = findViewById<com.google.android.material.tabs.TabLayout>(R.id.tab_layout)
+        setContent {
+            AppTheme {
+                val pagerState = rememberPagerState { tabTitles.size }
+                val scope = rememberCoroutineScope()
 
-        viewPager.adapter = object : FragmentStateAdapter(this) {
-            override fun getItemCount(): Int = fragments.size
-
-            override fun createFragment(position: Int): Fragment {
-                return try {
-                    fragments[position].getDeclaredConstructor().newInstance()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    Fragment()
+                Column(modifier = Modifier.fillMaxSize()) {
+                    TopAppBar(
+                        title = { Text("Identicons Demo") },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = androidx.compose.material3.MaterialTheme.colorScheme.primary,
+                            titleContentColor = androidx.compose.material3.MaterialTheme.colorScheme.onPrimary,
+                        ),
+                    )
+                    TabRow(
+                        selectedTabIndex = pagerState.currentPage,
+                        modifier = Modifier.fillMaxWidth(),
+                    ) {
+                        tabTitles.forEachIndexed { index, title ->
+                            Tab(
+                                selected = pagerState.currentPage == index,
+                                onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
+                                text = { Text(title) },
+                            )
+                        }
+                    }
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                    ) { page ->
+                        val onItemClick = { hash: Int, type: Int ->
+                            val intent = Intent(this@MainActivity, DetailActivity::class.java)
+                                .putExtra(DetailActivity.EXTRA_HASH, hash)
+                                .putExtra(DetailActivity.EXTRA_IDENTICON_TYPE, type)
+                            startActivity(intent)
+                        }
+                        when (page) {
+                            0 -> IdenticonGrid(IdenticonVariant.RANDOM_CLASSIC, onItemClick)
+                            1 -> IdenticonGrid(IdenticonVariant.SEQUENCE_CLASSIC, onItemClick)
+                            2 -> ClassicTilesGrid()
+                            3 -> IdenticonGrid(IdenticonVariant.GITHUB, onItemClick)
+                        }
+                    }
                 }
             }
         }
-
-        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-            tab.text = titles[position]
-        }.attach()
-    }
-
-    override fun onIdenticonSelected(hash: Int, identiconView: ImageView, fragment: IdenticonFragment) {
-        val type = when (identiconView.drawable) {
-            is GithubIdenticonDrawable -> DetailActivity.TYPE_GITHUB
-            is ClassicIdenticonDrawable -> DetailActivity.TYPE_CLASSIC
-            else -> DetailActivity.TYPE_CLASSIC
-        }
-
-        val intent = Intent(this, DetailActivity::class.java)
-            .putExtra(DetailActivity.EXTRA_TRANSITION_NAME, hash.toString())
-            .putExtra(DetailActivity.EXTRA_HASH, hash)
-            .putExtra(DetailActivity.EXTRA_IDENTICON_TYPE, type)
-
-        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(this, identiconView, hash.toString())
-
-        startActivity(intent, options.toBundle())
     }
 }
