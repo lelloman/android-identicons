@@ -60,7 +60,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.lelloman"
                 artifactId = "android-identicons"
-                version = "1.5"
+                version = "1.6"
             }
         }
     }
