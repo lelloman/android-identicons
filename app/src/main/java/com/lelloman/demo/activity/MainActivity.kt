@@ -1,16 +1,15 @@
 package com.lelloman.demo.activity
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentPagerAdapter
-import android.support.v4.view.ViewPager
-import android.support.v7.app.AppCompatActivity
 import android.transition.Explode
 import android.view.Window
 import android.widget.ImageView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.fragment.app.Fragment
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.google.android.material.tabs.TabLayoutMediator
 import com.lelloman.demo.R
 import com.lelloman.demo.fragment.ClassicTilesFragment
 import com.lelloman.demo.fragment.GithubIdenticonFragment
@@ -25,34 +24,34 @@ class MainActivity : AppCompatActivity(), IdenticonFragment.IdenticonFragmentLis
     internal var fragments = arrayOf(RandomClassicIdenticonFragment::class.java, SequenceClassicIdenticonFragment::class.java, ClassicTilesFragment::class.java, GithubIdenticonFragment::class.java)
     internal var titles = arrayOf("Random", "Sequence", "Tiles", "Github")
 
-    private val pager by lazy { findViewById<ViewPager>(R.id.view_pager) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
-            window.enterTransition = Explode()
-            window.exitTransition = Explode()
-        }
+        window.requestFeature(Window.FEATURE_CONTENT_TRANSITIONS)
+        window.enterTransition = Explode()
+        window.exitTransition = Explode()
         setContentView(R.layout.activity_main)
-        pager.adapter = object : FragmentPagerAdapter(supportFragmentManager) {
-            override fun getCount(): Int {
-                return fragments.size
-            }
 
-            override fun getItem(position: Int): Fragment? {
+        setSupportActionBar(findViewById(R.id.toolbar))
+
+        val viewPager = findViewById<androidx.viewpager2.widget.ViewPager2>(R.id.view_pager)
+        val tabLayout = findViewById<com.google.android.material.tabs.TabLayout>(R.id.tab_layout)
+
+        viewPager.adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount(): Int = fragments.size
+
+            override fun createFragment(position: Int): Fragment {
                 return try {
-                    fragments[position].newInstance()
+                    fragments[position].getDeclaredConstructor().newInstance()
                 } catch (e: Exception) {
                     e.printStackTrace()
-                    null
+                    Fragment()
                 }
             }
-
-            override fun getPageTitle(position: Int): CharSequence? {
-                return titles[position]
-            }
         }
+
+        TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+            tab.text = titles[position]
+        }.attach()
     }
 
     override fun onIdenticonSelected(hash: Int, identiconView: ImageView, fragment: IdenticonFragment) {

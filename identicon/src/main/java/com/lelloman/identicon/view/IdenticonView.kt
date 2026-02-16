@@ -1,22 +1,20 @@
 package com.lelloman.identicon.view
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
-import android.widget.ImageView
+import androidx.appcompat.widget.AppCompatImageView
 import com.lelloman.identicon.R
 import com.lelloman.identicon.drawable.IdenticonDrawable
 
 /**
- * An [ImageView] that displays an [IdenticonDrawable], its instantiation is delegated to
+ * An [AppCompatImageView] that displays an [IdenticonDrawable], its instantiation is delegated to
  * [IdenticonView.makeIdenticonDrawable].
  */
-@SuppressLint("AppCompatCustomView")
 abstract class IdenticonView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null
-) : ImageView(context, attrs) {
+) : AppCompatImageView(context, attrs) {
 
     var hash: Int = 0
         set(value) {

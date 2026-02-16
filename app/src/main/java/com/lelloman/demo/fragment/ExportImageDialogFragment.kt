@@ -1,14 +1,13 @@
 package com.lelloman.demo.fragment
 
-import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.net.Uri
 import android.os.Bundle
-import android.support.v4.app.DialogFragment
-import android.support.v4.content.FileProvider
+import androidx.fragment.app.DialogFragment
+import androidx.core.content.FileProvider
 import android.widget.NumberPicker
 import com.lelloman.demo.R
 import com.lelloman.demo.activity.DetailActivity
@@ -43,7 +42,7 @@ class ExportImageDialogFragment : DialogFragment() {
 
         view.displayedValues = DISPLAYED_SIZES
 
-        return AlertDialog.Builder(context)
+        return com.google.android.material.dialog.MaterialAlertDialogBuilder(context!!)
             .setTitle(R.string.select_size)
             .setView(view)
             .setPositiveButton(android.R.string.ok) { _, _ -> onSizeSelected(SIZES[view.value]) }

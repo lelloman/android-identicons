@@ -5,9 +5,9 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -22,7 +22,7 @@ class ClassicTilesFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
-        val recyclerView = RecyclerView(context!!)
+        val recyclerView = RecyclerView(requireContext())
 
         recyclerView.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         recyclerView.adapter = TilesAdapter()
@@ -41,8 +41,8 @@ class ClassicTilesFragment : Fragment() {
             view.setBackgroundColor(-0x666667)
             view.layoutParams = ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
 
-            val tileView = TileView(context!!)
-            val tileSize = (context!!.resources.displayMetrics.density * 32).toInt()
+            val tileView = TileView(requireContext())
+            val tileSize = (requireContext().resources.displayMetrics.density * 32).toInt()
             val tileMargin = tileSize / 4
             var layoutParams = LinearLayout.LayoutParams(tileSize, tileSize)
             layoutParams.setMargins(tileMargin, tileMargin, tileMargin, tileMargin)
