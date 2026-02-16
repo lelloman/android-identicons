@@ -14,7 +14,7 @@ import android.graphics.drawable.Drawable
 abstract class IdenticonDrawable(
     desiredWidth: Int,
     desiredHeight: Int,
-    hash: Int,
+    hash: ByteArray,
     multipleOf: Int
 ) : Drawable() {
 
@@ -26,7 +26,7 @@ abstract class IdenticonDrawable(
     val width: Int
     val height: Int
 
-    var hash: Int = hash
+    var hash: ByteArray = hash
         set(value) {
             field = value
             onSetHash(value)
@@ -58,7 +58,7 @@ abstract class IdenticonDrawable(
 
     protected abstract fun drawBitmap(canvas: Canvas)
 
-    protected open fun onSetHash(newHash: Int) = Unit
+    protected open fun onSetHash(newHash: ByteArray) = Unit
 
     override fun draw(canvas: Canvas) {
         destinationRect.set(0, 0, canvas.width, canvas.height)

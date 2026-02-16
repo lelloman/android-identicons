@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import com.lelloman.identicon.drawable.IdenticonDrawable
+import com.lelloman.identicon.util.toIdenticonHash
 import com.lelloman.identicon.view.IdenticonView
 import java.util.*
 
@@ -59,7 +60,7 @@ abstract class IdenticonFragment : Fragment() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
             val view = object : IdenticonView(parent.context) {
-                override fun makeIdenticonDrawable(width: Int, height: Int, hash: Int) =
+                override fun makeIdenticonDrawable(width: Int, height: Int, hash: ByteArray) =
                     this@RecyclerViewAdapter.makeIdenticonDrawable(width, height, hash)
 
                 override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -74,14 +75,15 @@ abstract class IdenticonFragment : Fragment() {
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val hash = getHashForPosition(position)
             holder.hash = hash
-            holder.identiconView.hash = hash
+            holder.identiconView.hash = hashToBytes(hash)
             ViewCompat.setTransitionName(holder.identiconView, hash.toString())
         }
 
         override fun getItemCount() = Integer.MAX_VALUE
 
+        protected open fun hashToBytes(hash: Int): ByteArray = hash.toIdenticonHash()
         protected abstract fun getHashForPosition(position: Int): Int
-        protected abstract fun makeIdenticonDrawable(width: Int, height: Int, hash: Int): IdenticonDrawable
+        protected abstract fun makeIdenticonDrawable(width: Int, height: Int, hash: ByteArray): IdenticonDrawable
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {

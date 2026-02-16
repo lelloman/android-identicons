@@ -11,14 +11,14 @@ import com.lelloman.identicon.util.addRectangle
 import com.lelloman.identicon.util.addTriangle
 
 /**
- * Collection of all shapes, 32 of them in total.
+ * Collection of all shapes, 37 of them in total.
  * The tiles at positions %4 = 0 are symmetric in both axis
  * and are the ones that can be used as central tile.
  */
 object ClassicIdenticonTile {
 
     /**
-     * drawing values, 0-31
+     * drawing values, 0-36
      */
     var all = arrayOf(
 
@@ -36,7 +36,18 @@ object ClassicIdenticonTile {
 
         Tiles.ROTATE_SQUARE_WITH_HOLE, Tiles.TWO_OPPOSITE_TRIANGLES, Tiles.TRIANGLE_SANDWICH, Tiles.SPIKE,
 
-        Tiles.FOUR_TRIANGLES_STAR, Tiles.BIG_TRIANGLE_TIP, Tiles.DIAMOND, Tiles.TWO_OPPOSITE_TRIANGLES_BIG)
+        Tiles.FOUR_TRIANGLES_STAR, Tiles.BIG_TRIANGLE_TIP, Tiles.DIAMOND, Tiles.TWO_OPPOSITE_TRIANGLES_BIG,
+
+        Tiles.CROSS, Tiles.CHEVRON, Tiles.L_SHAPE, Tiles.HOURGLASS, Tiles.STEPPED_DIAGONAL)
+
+    /**
+     * The 9 symmetric tiles that can be used as the middle tile.
+     */
+    val symmetric = arrayOf(
+        Tiles.FOUR_SQUARES, Tiles.ROTATED_SQUARE, Tiles.LITTLE_SQUARE, Tiles.FOUR_TRIANGLES,
+        Tiles.LITTLE_ROTATED_SQUARE, Tiles.FOUR_TRIANGLES_FACING_CENTER, Tiles.ROTATE_SQUARE_WITH_HOLE,
+        Tiles.FOUR_TRIANGLES_STAR, Tiles.CROSS
+    )
 
     enum class Tiles(drawer: (Path, TileMeasures) -> Unit) {
         // 1
@@ -204,6 +215,32 @@ object ClassicIdenticonTile {
         TWO_OPPOSITE_TRIANGLES_BIG({ path, meas ->
             path.addTriangle(0, 0, meas.wMid, meas.hMid, 0, meas.height)
             path.addTriangle(meas.width, 0, meas.wMid, meas.hMid, meas.width, meas.height)
+        }),
+        // 33 - symmetric, plus sign shape
+        CROSS({ path, meas ->
+            path.addRectangle(meas.w3, 0, meas.w32, meas.height)
+            path.addRectangle(0, meas.h3, meas.width, meas.h32)
+        }),
+        // 34 - V-shape / arrow pointing down
+        CHEVRON({ path, meas ->
+            path.addPolygon(0, 0, meas.wMid, meas.hMid, meas.width, 0, meas.width, meas.h3)
+            path.addPolygon(meas.wMid, meas.hMid, 0, meas.h3, meas.wMid, meas.height, meas.width, meas.h3)
+        }),
+        // 35 - L in corner
+        L_SHAPE({ path, meas ->
+            path.addRectangle(0, 0, meas.w3, meas.height)
+            path.addRectangle(meas.w3, meas.h32, meas.width, meas.height)
+        }),
+        // 36 - two triangles meeting at center point
+        HOURGLASS({ path, meas ->
+            path.addTriangle(0, 0, meas.width, 0, meas.wMid, meas.hMid)
+            path.addTriangle(0, meas.height, meas.width, meas.height, meas.wMid, meas.hMid)
+        }),
+        // 37 - staircase pattern (3 rectangles along diagonal)
+        STEPPED_DIAGONAL({ path, meas ->
+            path.addRectangle(0, 0, meas.w3, meas.h3)
+            path.addRectangle(meas.w3, meas.h3, meas.w32, meas.h32)
+            path.addRectangle(meas.w32, meas.h32, meas.width, meas.height)
         });
 
         private val tileDrawer = TileDrawer(drawer)

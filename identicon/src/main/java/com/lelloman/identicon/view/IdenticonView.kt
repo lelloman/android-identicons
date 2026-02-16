@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.appcompat.widget.AppCompatImageView
 import com.lelloman.identicon.R
 import com.lelloman.identicon.drawable.IdenticonDrawable
+import com.lelloman.identicon.util.toIdenticonHash
 
 /**
  * An [AppCompatImageView] that displays an [IdenticonDrawable], its instantiation is delegated to
@@ -16,7 +17,7 @@ abstract class IdenticonView @JvmOverloads constructor(
     attrs: AttributeSet? = null
 ) : AppCompatImageView(context, attrs) {
 
-    var hash: Int = 0
+    var hash: ByteArray = ByteArray(16)
         set(value) {
             field = value
             identiconDrawable?.let { identiconDrawable ->
@@ -30,7 +31,8 @@ abstract class IdenticonView @JvmOverloads constructor(
         if (attrs != null) {
             val a = context.obtainStyledAttributes(attrs, R.styleable.IdenticonView)
             try {
-                hash = a.getInt(R.styleable.IdenticonView_hash, hash)
+                val intHash = a.getInt(R.styleable.IdenticonView_hash, 0)
+                hash = intHash.toIdenticonHash()
             } catch (exception: Throwable) {
                 Log.w(javaClass.simpleName, "Something went wrong when initializing ${javaClass.name} $this")
             } finally {
@@ -47,5 +49,5 @@ abstract class IdenticonView @JvmOverloads constructor(
         }
     }
 
-    protected abstract fun makeIdenticonDrawable(width: Int, height: Int, hash: Int): IdenticonDrawable
+    protected abstract fun makeIdenticonDrawable(width: Int, height: Int, hash: ByteArray): IdenticonDrawable
 }

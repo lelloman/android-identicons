@@ -11,7 +11,7 @@ import com.lelloman.identicon.util.TileMeasures
 class ClassicIdenticonDrawable(
     width: Int,
     height: Int,
-    hash: Int
+    hash: ByteArray
 ) : IdenticonDrawable(
     desiredWidth = width,
     desiredHeight = height,
@@ -28,9 +28,9 @@ class ClassicIdenticonDrawable(
 
     private val color: Int
         get() {
-            val r = 100 + identiconHash!!.r * 8
-            val g = 100 + identiconHash!!.g * 8
-            val b = 100 + identiconHash!!.b * 8
+            val r = 80 + identiconHash!!.r * 2
+            val g = 80 + identiconHash!!.g * 2
+            val b = 80 + identiconHash!!.b * 2
 
             return -0x1000000 + r * 0x10000 + g * 0x100 + b
         }
@@ -44,12 +44,12 @@ class ClassicIdenticonDrawable(
         bgPaint.color = -0x1
         fgPaint.color = -0x1000000
 
-        tileMeasure = TileMeasures(width / 3, height / 3)
+        tileMeasure = TileMeasures(this.width / 3, this.height / 3)
 
         invalidateBitmap()
     }
 
-    override fun onSetHash(newHash: Int) {
+    override fun onSetHash(newHash: ByteArray) {
         identiconHash = ClassicIdenticonHash(newHash)
     }
 
@@ -67,6 +67,9 @@ class ClassicIdenticonDrawable(
         drawSides(canvas)
     }
 
+    private fun getMiddleTile(): ClassicIdenticonTile.Tiles =
+        ClassicIdenticonTile.symmetric[identiconHash!!.middle]
+
     private fun getTile(position: Int): ClassicIdenticonTile.Tiles =
         ClassicIdenticonTile.all[position]
 
@@ -79,7 +82,7 @@ class ClassicIdenticonDrawable(
 
         canvas.save()
         canvas.translate(tileMeasure.width.toFloat(), tileMeasure.height.toFloat())
-        getTile(identiconHash!!.middle).draw(canvas, tileMeasure, 0, bg, fg)
+        getMiddleTile().draw(canvas, tileMeasure, identiconHash!!.middleRotation * 90, bg, fg)
         canvas.restore()
 
     }

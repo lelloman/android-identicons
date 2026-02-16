@@ -11,7 +11,7 @@ class GithubIdenticonFragment : IdenticonFragment() {
                 return IdenticonFragment.RANDOM.nextInt()
             }
 
-            override fun makeIdenticonDrawable(width: Int, height: Int, hash: Int): IdenticonDrawable {
+            override fun makeIdenticonDrawable(width: Int, height: Int, hash: ByteArray): IdenticonDrawable {
                 return GithubIdenticonDrawable(width, height, hash)
             }
         }

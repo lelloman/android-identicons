@@ -13,6 +13,7 @@ import com.lelloman.demo.R
 import com.lelloman.demo.fragment.ExportImageDialogFragment
 import com.lelloman.identicon.drawable.ClassicIdenticonDrawable
 import com.lelloman.identicon.drawable.GithubIdenticonDrawable
+import com.lelloman.identicon.util.toIdenticonHash
 import java.util.*
 
 class DetailActivity : AppCompatActivity(), ExportImageDialogFragment.ExportImageListener {
@@ -25,6 +26,8 @@ class DetailActivity : AppCompatActivity(), ExportImageDialogFragment.ExportImag
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
+
+        setSupportActionBar(findViewById(R.id.toolbar))
 
         intent?.let {
             val transitionName = it.getStringExtra(EXTRA_TRANSITION_NAME)
@@ -41,9 +44,10 @@ class DetailActivity : AppCompatActivity(), ExportImageDialogFragment.ExportImag
                 var drawable: Drawable? = null
 
                 val size = Math.min(imageView.width, imageView.height)
+                val hashBytes = hash.toIdenticonHash()
                 when (type) {
-                    TYPE_CLASSIC -> drawable = ClassicIdenticonDrawable(size, size, hash)
-                    TYPE_GITHUB -> drawable = GithubIdenticonDrawable(size, size, hash)
+                    TYPE_CLASSIC -> drawable = ClassicIdenticonDrawable(size, size, hashBytes)
+                    TYPE_GITHUB -> drawable = GithubIdenticonDrawable(size, size, hashBytes)
                 }
 
                 val layoutParams = imageView.layoutParams

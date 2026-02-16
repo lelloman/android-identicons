@@ -14,6 +14,7 @@ import com.lelloman.demo.activity.DetailActivity
 import com.lelloman.identicon.drawable.ClassicIdenticonDrawable
 import com.lelloman.identicon.drawable.GithubIdenticonDrawable
 import com.lelloman.identicon.drawable.IdenticonDrawable
+import com.lelloman.identicon.util.toIdenticonHash
 import java.io.File
 import java.io.FileOutputStream
 
@@ -82,9 +83,10 @@ class ExportImageDialogFragment : DialogFragment() {
     }
 
     private fun makeIdenticonDrawable(size: Int, type: Int, hash: Int): IdenticonDrawable? {
+        val hashBytes = hash.toIdenticonHash()
         when (type) {
-            DetailActivity.TYPE_CLASSIC -> return ClassicIdenticonDrawable(size, size, hash)
-            DetailActivity.TYPE_GITHUB -> return GithubIdenticonDrawable(size, size, hash)
+            DetailActivity.TYPE_CLASSIC -> return ClassicIdenticonDrawable(size, size, hashBytes)
+            DetailActivity.TYPE_GITHUB -> return GithubIdenticonDrawable(size, size, hashBytes)
         }
         return null
     }

@@ -1,18 +1,18 @@
 package com.lelloman.identicon.drawable
 
-
 import android.graphics.Canvas
 import android.graphics.Paint
 
+import com.lelloman.identicon.util.extractBits
 
 /**
- * Draws an identicon as the ones from github, it just uses 15bits
- * for the tiles and 6bits - 4 values for the colors.
+ * Draws an identicon as the ones from github, it uses 15 bits
+ * for the tiles and 18 bits (6+6+6) for the RGB color.
  */
 class GithubIdenticonDrawable(
     width: Int,
     height: Int,
-    hash: Int
+    hash: ByteArray
 ) : IdenticonDrawable(
     desiredWidth = width,
     desiredHeight = height,
@@ -22,7 +22,13 @@ class GithubIdenticonDrawable(
 
     private val fgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply { style = Paint.Style.FILL }
 
-    val color: Int get() = COLORS[Math.abs((hash shr 15) % COLORS.size)]
+    val color: Int
+        get() {
+            val r = 80 + extractBits(hash, 15, 6) * 2
+            val g = 80 + extractBits(hash, 21, 6) * 2
+            val b = 80 + extractBits(hash, 27, 6) * 2
+            return -0x1000000 + r * 0x10000 + g * 0x100 + b
+        }
 
     init {
         invalidateBitmap()
@@ -46,8 +52,7 @@ class GithubIdenticonDrawable(
             val endXMirror = startXMirror + w
 
             for (y in 0..4) {
-                val value = hash shr i++
-                val draw = value % 2 == 0
+                val draw = extractBits(hash, i++, 1) == 0
                 if (!draw) continue
 
                 val startY = (y * h).toFloat()
@@ -59,31 +64,4 @@ class GithubIdenticonDrawable(
             }
         }
     }
-
-    companion object {
-        // create 4*4*4 colors but remove the grays
-        var COLORS: IntArray
-        init {
-            val n = 4
-            val size = n * n * n - n
-            COLORS = IntArray(size)
-            var index = 0
-            val colorBase = 150
-            val colorTot = 100 / n
-            for (i in 0 until n) {
-                for (j in 0 until n) {
-                    for (k in 0 until n) {
-                        if (i == j && j == k) continue
-                        val r = colorBase + i * colorTot
-                        val g = colorBase + j * colorTot
-                        val b = colorBase + k * colorTot
-
-                        val color = -0x1000000 + r * 0x10000 + g * 0x100 + b
-                        COLORS[index++] = color
-                    }
-                }
-            }
-        }
-    }
-
 }
