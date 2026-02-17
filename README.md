@@ -27,7 +27,7 @@ dependencyResolutionManagement {
 
 In your module's `build.gradle.kts`:
 ```kotlin
-implementation("com.github.lelloman:android-identicons:v1.6")
+implementation("com.github.lelloman:android-identicons:v12")
 ```
 
 ## Usage
